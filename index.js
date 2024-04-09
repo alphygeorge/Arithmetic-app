@@ -1,28 +1,21 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser'); // Require cookie-parser
+const cookieParser = require('cookie-parser');
 const app = express();
-const crypto = require('crypto');
 
 // Middleware to parse cookies
 app.use(cookieParser());
-// Generate a random secure key of 32 bytes (256 bits)
-
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
 // Secret key for JWT
-const JWT_SECRET = 'J8zTpS3vYQbnkAu4mRc9LeF6XaWwD2qZ'; // Change this to your secret key
-
+const JWT_SECRET = 'J8zTpS3vYQbnkAu4mRc9LeF6XaWwD2qZ'; 
 // Middleware to generate JWT and save it in cookies
 app.use('/', (req, res, next) => {
-
   // Generate JWT
-  const secretKey = crypto.randomBytes(32).toString('hex');
-console.log("secret key is", secretKey);
-  const token = jwt.sign({}, secretKey); // Empty payload
-  console.log("Token is =", token)
+  const token = jwt.sign({}, JWT_SECRET);
+  console.log(token) 
   
   // Set JWT in cookies
   res.cookie('token', token, { httpOnly: true });
@@ -32,7 +25,7 @@ console.log("secret key is", secretKey);
 
 // Middleware to verify JWT
 function verifyToken(req, res, next) {
-  const token = req.cookies.token; // Now req.cookies should be defined
+  const token = req.cookies.token; 
 
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized: No token provided' });
@@ -48,32 +41,43 @@ function verifyToken(req, res, next) {
 }
 
 // Route for addition, requires token verification
-app.post('/add', verifyToken, (req, res) => {
+app.post('/addition', verifyToken, (req, res) => {
   const { num1, num2 } = req.body;
+  if (!num1 || !num2 || isNaN(num1) || isNaN(num2)) {
+    return res.status(400).json({ error: 'Invalid numbers provided' });
+  }
   const result = parseFloat(num1) + parseFloat(num2);
   res.json({ result });
 });
 
-// Route for subtraction, requires token verification
-app.post('/sub', verifyToken, (req, res) => {
+// Route for subtraction,
+app.post('/subtraction', verifyToken, (req, res) => {
   const { num1, num2 } = req.body;
+  if (!num1 || !num2 || isNaN(num1) || isNaN(num2)) {
+    return res.status(400).json({ error: 'Invalid numbers provided' });
+  }
   const result = parseFloat(num1) - parseFloat(num2);
   res.json({ result });
 });
 
 // Route for multiplication, requires token verification
-app.post('/mul', verifyToken, (req, res) => {
+app.post('/multiplication', verifyToken, (req, res) => {
   const { num1, num2 } = req.body;
+  if (!num1 || !num2 || isNaN(num1) || isNaN(num2)) {
+    return res.status(400).json({ error: 'Invalid numbers provided' });
+  }
   const result = parseFloat(num1) * parseFloat(num2);
   res.json({ result });
 });
 
 // Route for division, requires token verification
-app.post('/div', verifyToken, (req, res) => {
+app.post('/division', verifyToken, (req, res) => {
   const { num1, num2 } = req.body;
+  if (!num1 || !num2 || isNaN(num1) || isNaN(num2)) {
+    return res.status(400).json({ error: 'Invalid numbers provided' });
+  }
   if (parseFloat(num2) === 0) {
-    res.status(400).json({ error: "Division by zero" });
-    return;
+    return res.status(400).json({ error: "Division by zero" });
   }
   const result = parseFloat(num1) / parseFloat(num2);
   res.json({ result });
@@ -82,5 +86,5 @@ app.post('/div', verifyToken, (req, res) => {
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log('Server is listening on port ${PORT}');
+  console.log(`Server is listening on port ${PORT}`);
 });
