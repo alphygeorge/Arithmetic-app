@@ -1,0 +1,28 @@
+{
+  "name": "arithmetic-app",
+  "version": "1.0.0",
+  "description": "Application that act as a simple arithmetic operation API protected by authentication ",
+  "main": "index.js",
+  "scripts": {
+    
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "vue": "^2.7.16",
+    "vue-loader": "^15.11.1",
+    "vue-template-compiler": "^2.7.16",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
